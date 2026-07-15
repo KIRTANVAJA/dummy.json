@@ -4,21 +4,21 @@ import './Home.css';
 
 function Cart() {
   const [cart, setCart] = useState(() => {
-    const saved = localStorage.getItem('starbucks_cart');
+    const saved = localStorage.getItem('ecommerce_cart');
     return saved ? JSON.parse(saved) : [];
   });
   const [user, setUser] = useState(() => {
-    const saved = localStorage.getItem('starbucks_user');
+    const saved = localStorage.getItem('ecommerce_user');
     return saved ? JSON.parse(saved) : null;
   });
 
   const handleLogout = () => {
-    localStorage.removeItem('starbucks_user');
+    localStorage.removeItem('ecommerce_user');
     setUser(null);
   };
 
   useEffect(() => {
-    localStorage.setItem('starbucks_cart', JSON.stringify(cart));
+    localStorage.setItem('ecommerce_cart', JSON.stringify(cart));
   }, [cart]);
 
   // Group products by ID to compute quantities
@@ -37,7 +37,6 @@ function Cart() {
   };
 
   const handleDecrement = (productId) => {
-    // Remove the first occurrence of the product with the given ID
     const index = cart.findIndex(item => item.id === productId);
     if (index !== -1) {
       const newCart = [...cart];
@@ -47,7 +46,6 @@ function Cart() {
   };
 
   const handleRemove = (productId) => {
-    // Remove all occurrences of the product with the given ID
     setCart(cart.filter(item => item.id !== productId));
   };
 
@@ -56,11 +54,8 @@ function Cart() {
     alert("Order placed successfully! Thank you for shopping with us.");
   };
 
-  // Calculations
   const totalItemsCount = cart.length;
   
-  // Calculate total original price before discount
-  // Note: dummyjson returns price as discounted price, let's compute an estimated original price based on discountPercentage
   const totalOriginalPrice = groupedCart.reduce((sum, item) => {
     const discount = item.discountPercentage || 0;
     const originalItemPrice = item.price / (1 - discount / 100);
@@ -72,10 +67,9 @@ function Cart() {
 
   return (
     <div className="Home-container">
-      {/* Navigation */}
       <nav className="navbar">
-        <Link to="/" className="nav-logo" style={{ textDecoration: 'none', color: 'inherit' }}>
-          🛒 E-commerce Shop
+        <Link to="/" className="nav" style={{ textDecoration: 'none', color: 'inherit', fontSize: '24px', fontWeight: '600' ,marginRight: 'auto' }}>
+           E-commerce Shop
         </Link>
         <div className="nav-actions" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           {user ? (
@@ -92,11 +86,9 @@ function Cart() {
         </div>
       </nav>
 
-      {/* Cart Container */}
       <main className="main-content">
         {groupedCart.length === 0 ? (
           <div className="no-products animate-fade-in" style={{ padding: '60px 20px' }}>
-            <div style={{ fontSize: '48px', marginBottom: '20px' }}>🛒</div>
             <h2 style={{ fontSize: '22px', fontWeight: '600', marginBottom: '8px', color: '#212121' }}>
               Your Cart is Empty!
             </h2>
@@ -110,7 +102,6 @@ function Cart() {
         ) : (
           <div className="cart-layout" style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', alignItems: 'flex-start' }}>
             
-            {/* Left Column: Cart items */}
             <div className="cart-items-panel" style={{ flex: '1', minWidth: '300px', backgroundColor: 'white', borderRadius: '4px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
               <div style={{ padding: '16px 24px', borderBottom: '1px solid #f0f0f0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <h2 style={{ fontSize: '18px', fontWeight: '600' }}>My Cart ({groupedCart.length})</h2>
@@ -120,13 +111,11 @@ function Cart() {
               {groupedCart.map((item) => (
                 <div key={item.id} className="cart-item-row" style={{ display: 'flex', gap: '20px', padding: '24px', borderBottom: '1px solid #f0f0f0' }}>
                   
-                  {/* Item Image & Stepper */}
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '112px' }}>
                     <div style={{ width: '112px', height: '112px', display: 'flex', alignItems: 'center', justifyItems: 'center', marginBottom: '16px' }}>
                       <img src={item.thumbnail} alt={item.title} style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', margin: 'auto' }} />
                     </div>
                     
-                    {/* Stepper */}
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                       <button 
                         onClick={() => handleDecrement(item.id)} 
@@ -145,7 +134,6 @@ function Cart() {
                     </div>
                   </div>
 
-                  {/* Item Details */}
                   <div style={{ flex: '1', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                     <h3 style={{ fontSize: '16px', fontWeight: '500', color: '#212121', display: '-webkit-box', WebkitLineClamp: '2', WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
                       {item.title}
@@ -184,7 +172,6 @@ function Cart() {
                 </div>
               ))}
 
-              {/* Place Order CTA Footer */}
               <div style={{ padding: '16px 22px', display: 'flex', justifyContent: 'flex-end', boxShadow: '0 -2px 10px rgba(0,0,0,0.05)', backgroundColor: 'white', borderBottomLeftRadius: '4px', borderBottomRightRadius: '4px' }}>
                 <button 
                   onClick={clearCart}
@@ -197,7 +184,6 @@ function Cart() {
               </div>
             </div>
 
-            {/* Right Column: Price Details */}
             <aside className="price-details-panel" style={{ width: '350px', backgroundColor: 'white', borderRadius: '4px', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
               <div style={{ padding: '12px 24px', borderBottom: '1px solid #f0f0f0' }}>
                 <h3 style={{ fontSize: '14px', color: '#878787', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
@@ -238,7 +224,6 @@ function Cart() {
         )}
       </main>
 
-      {/* Footer */}
       <footer className="footer" style={{ marginTop: 'auto' }}>
         <div className="footer-links">
           <div>

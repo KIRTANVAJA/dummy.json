@@ -7,7 +7,7 @@ function Home() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [cart, setCart] = useState(() => {
-    const saved = localStorage.getItem('starbucks_cart');
+    const saved = localStorage.getItem('ecommerce_cart');
     return saved ? JSON.parse(saved) : [];
   });
   const [search, setSearch] = useState('');
@@ -17,22 +17,22 @@ function Home() {
   const [maxPrice, setMaxPrice] = useState(2000);
   const [minRating, setMinRating] = useState(0);
   const [user, setUser] = useState(() => {
-    const saved = localStorage.getItem('starbucks_user');
+    const saved = localStorage.getItem('ecommerce_user');
     return saved ? JSON.parse(saved) : null;
   });
 
   const handleLogout = () => {
-    localStorage.removeItem('starbucks_user');
+    localStorage.removeItem('ecommerce_user');
     setUser(null);
   };
 
   useEffect(() => {
-    localStorage.setItem('starbucks_cart', JSON.stringify(cart));
+    localStorage.setItem('ecommerce_cart', JSON.stringify(cart));
     
   }, [cart]);
 
   useEffect(() => {
-    fetch('https://dummyjson.com/products?limit=100')
+    fetch('https://dummyjson.com/products?limit=50')
       .then(res => {
         if (!res.ok) {
           throw new Error('Failed to fetch products');
@@ -69,7 +69,7 @@ function Home() {
 
   const handleClearFilters = () => {
     setSelectedCategories([]);
-    setMaxPrice(2000);
+    setMaxPrice(50);
     setMinRating(0);
   };
 
@@ -99,7 +99,7 @@ function Home() {
   return (
     <div className="Home-container">
       <nav className="navbar">
-        <div className="nav-logo">E-commerce</div>
+        <div className="nav" style={{ fontSize: '24px', fontWeight: '600',marginRight: 'auto' }}>E-commerce</div>
         <div className="nav-search">
           <input
             type="text"
@@ -118,19 +118,11 @@ function Home() {
             <Link to="/login" className="login-btn" style={{ textDecoration: 'none', textAlign: 'center' }}>Login</Link>
           )}
           <Link to="/cart" className="cart-icon" style={{ textDecoration: 'none', color: 'inherit' }}>
-            <span>🛒</span>
             <span className="cart-badge">{cart.length}</span>
           </Link>
         </div>
       </nav>
 
-      <div className="hero-banner">
-        <div className="hero-content">
-          <h1>Mega Electronics & Fashion Sale</h1>
-          <p>Get up to 50% off on top brands and categories</p>
-          <button className="shop-now-btn">Shop Now</button>
-        </div>
-      </div>
 
       <main className="main-content" style={{ display: 'flex', gap: '20px', alignItems: 'flex-start', flexWrap: 'wrap' }}>
         
